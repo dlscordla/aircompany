@@ -2,6 +2,8 @@ import models.ClassificationLevel;
 import models.ExperimentalType;
 import models.MilitaryType;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import planes.ExperimentalPlane;
 import planes.MilitaryPlane;
@@ -44,7 +46,12 @@ public class AirportTest {
               ExperimentalType.VERTICAL_TAKE_OFF_AND_LANDING,
               ClassificationLevel.TOP_SECRET));
 
-  private final Airport airport = new Airport(planes);
+  private Airport airport;
+
+  @BeforeClass
+  void setUp() {
+    airport = new Airport(planes);
+  }
 
   @Test
   void getTransportMilitaryPlanes() {
@@ -62,7 +69,7 @@ public class AirportTest {
         new PassengerPlane("Boeing-747", 980, 16100, 70500, 242);
     PassengerPlane actualPlaneWithMaxPassengerCapacity =
         airport.getPassengerPlaneWithMaxPassengersCapacity();
-    Assert.assertEquals(expectedPlaneWithMaxPassengerCapacity, actualPlaneWithMaxPassengerCapacity);
+    Assert.assertEquals(actualPlaneWithMaxPassengerCapacity, expectedPlaneWithMaxPassengerCapacity);
   }
 
   @Test
@@ -73,6 +80,11 @@ public class AirportTest {
   @Test
   void isExperimentalPlanesClassificationLevelHigherThanSpecified() {
     assertIsHigherClassified(airport);
+  }
+
+  @AfterClass
+  void tearDown() {
+    airport = null;
   }
 
   private void assertIsSorted(Airport sortedAirport) {
